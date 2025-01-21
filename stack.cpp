@@ -55,7 +55,7 @@ int main()
         break;
 }
 
-    cout<<"Continue?1(Y/N)"<<endl;
+    cout<<"Continue?(Y/N)"<<endl;
     cin>>ch;
 }
     while(ch!='n');
