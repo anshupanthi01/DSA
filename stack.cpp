@@ -58,6 +58,6 @@ int main()
     cout<<"Continue?(Y/N)"<<endl;
     cin>>ch;
 }
-    while(ch!='n');
+    while(ch=='y');
     return 0;
 }
