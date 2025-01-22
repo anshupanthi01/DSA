@@ -3,7 +3,7 @@
 #include <string.h>
 using namespace std;
 int top = -1;
-char exp[50]="562*42/1-1*-4*+";
+char postfix[50];
 int stack[MAX];
 
 int pop()
@@ -19,42 +19,46 @@ int push(int x)
     stack[top] = x;
 }
 
-int main(){
+int main()
+{
     int i, b, a;
     char ch;
     int var;
-    int l = strlen(exp);
-    for(i = 0; i < l; i++)
+    cout << "Enter the postfix expression: ";
+    cin >> postfix;
+    int l = strlen(postfix);
+    for (i = 0; i < l; i++)
     {
-        cout<<exp[i]<<"\n";
-        if(exp[i] == '*' || exp[i] == '/' || exp[i] == '+' || exp[i] == '-')
+        cout << postfix[i] << "\n";
+        if (postfix[i] == '*' || postfix[i] == '/' || postfix[i] == '+' || postfix[i] == '-')
         {
             a = pop();
             b = pop();
-            switch(exp[i])
+            switch (postfix[i])
             {
-                case '*':
-                var = b*a;
+            case '*':
+                var = b * a;
                 break;
-                case '/':
-                var = b/a;
+            case '/':
+                var = b / a;
                 break;
-                case '+':
-                var = b+a;
+            case '+':
+                var = b + a;
                 break;
-                case '-':
-                var = b-a;
+            case '-':
+                var = b - a;
                 break;
-                default:
-                cout<<"Invalid";
+            default:
+                cout << "Invalid";
                 break;
             }
             push(var);
         }
-        else{
-            push(exp[i]-48);
+        else
+        {
+            push(postfix[i] - 48);
         }
     }
-    cout<<stack[top];
+    cout << stack[top];
     return 0;
 }
