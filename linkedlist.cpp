@@ -41,7 +41,7 @@ void insertAtEnd()
     if (pfirst == NULL)
     {
         pfirst = pnew;
-        pnew->link = NULL;
+        // pnew->link = NULL;
     }
     else
     {
@@ -170,14 +170,14 @@ void DelAtPos()
     }
     else
     {
-        if (pfirst->link == NULL)
+        pthis = pfirst;
+        for (int i = 1; i < loc - 1; i++)
         {
-            delete (pfirst);
-            pfirst = NULL;
+            pthis = pthis->link;
         }
-        ptemp = pfirst->link;
-        delete (pfirst);
-        pfirst = ptemp;
+        ptemp = pthis->link->link;
+        delete(pthis->link);
+        pthis->link = ptemp;
     }
 }
 int main()
