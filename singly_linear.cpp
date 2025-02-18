@@ -176,7 +176,7 @@ void DelAtPos()
             pthis = pthis->link;
         }
         ptemp = pthis->link->link;
-        delete(pthis->link);
+        delete(pthis->link); 
         pthis->link = ptemp;
     }
 }
