@@ -4,11 +4,11 @@ using namespace std;
 struct node
 {
     int data;
-    node *link;
+    node *link, *prev;
 };
 
 node *pfirst = NULL;
-node *pnew, *pthis, *ptemp, *plast;
+node *pnew, *pthis, *ptemp, *ptemp1, *plast;
 int count = 0, loc;
 
 void create()
@@ -16,6 +16,8 @@ void create()
     pnew = new node;
     cout << "Enter the data: ";
     cin >> pnew->data;
+    pnew->link = NULL;
+    pnew->prev = NULL;
     count++;
 }
 
@@ -26,13 +28,15 @@ void insertAtBeg()
     {
         pfirst = pnew;
         plast = pnew;
-        plast->link = pfirst;
+        pfirst->link = NULL;
+        pfirst->prev = NULL;
     }
     else
     {
+        pnew->prev = NULL;
         pnew->link = pfirst;
+        pfirst->prev = pnew;
         pfirst = pnew;
-        plast->link = pfirst;
     }
 }
 
@@ -43,13 +47,15 @@ void insertAtEnd()
     {
         pfirst = pnew;
         plast = pnew;
-        plast->link = pfirst;
+        pfirst->link = NULL;
+        pfirst->prev = NULL;
     }
     else
     {
         plast->link = pnew;
+        pnew->prev = plast;
+        pnew->link = NULL;
         plast = pnew;
-        plast->link = pfirst;
     }
 }
 
@@ -62,10 +68,11 @@ void insertbeforepos()
     {
         insertAtBeg();
     }
-    if (loc < 1 || loc > count) {
+    if (loc < 1 || loc > count)
+    {
         cout << "Invalid position!";
         return;
-    }    
+    }
     else
     {
         pthis = pfirst;
@@ -75,7 +82,9 @@ void insertbeforepos()
         }
         ptemp = pthis->link;
         pthis->link = pnew;
+        pnew->prev = pthis;
         pnew->link = ptemp;
+        ptemp->prev = pnew;
     }
 }
 
@@ -90,8 +99,10 @@ void insertafterpos()
         pthis = pthis->link;
     }
     ptemp = pthis->link;
-    pthis->link = pnew;
+    ptemp->prev = pnew;
     pnew->link = ptemp;
+    pnew->prev = pthis;
+    pthis->link = pnew;
 }
 
 void display()
@@ -103,12 +114,11 @@ void display()
     else
     {
         pthis = pfirst;
-        while (pthis->link != pfirst)
+        while (pthis != NULL)
         {
             cout << pthis->data << "->";
             pthis = pthis->link;
         }
-        cout << pthis->data;
     }
 }
 
@@ -118,25 +128,23 @@ void DelAtBeg()
     {
         cout << "the list is empty";
     }
-    else if (pfirst->link == pfirst)
-        {
-            cout << "the deleted data is: " << pfirst->link;
-            count--;
-            delete (pfirst);
-            delete(plast);
-            pfirst = NULL;
-            plast = NULL;
-        }
-        else
-        {
-            cout << "the deleted data is:" << pfirst->data << endl;
-            count--;
-            ptemp = pfirst->link;
-            delete (pfirst);
-            pfirst=ptemp;
-            plast->link =pfirst;
-        }
-    
+    else if (pfirst->link == NULL)
+    {
+        cout << "the deleted data is: " << pfirst->link;
+        count--;
+        delete (pfirst);
+        pfirst = NULL;
+        plast = NULL;
+    }
+    else
+    {
+        cout << "the deleted data is:" << pfirst->data << endl;
+        count--;
+        ptemp = pfirst->link;
+        delete (pfirst);
+        pfirst = ptemp;
+        plast->prev = NULL;
+    }
 }
 
 void DelAtEnd()
@@ -145,30 +153,23 @@ void DelAtEnd()
     {
         cout << "the list is empty";
     }
-    else  if (pfirst->link == pfirst)
-        {
-            cout << "the deleted data is: " << pfirst->link;
-            count--;
-            delete (pfirst);
-            delete(plast);
-            pfirst = NULL;
-            plast = NULL;
-        }
-        else
-        {
-            pthis = pfirst;
-            while (pthis->link != plast)
-            {
-                pthis = pthis->link;
-            }
-            cout << "the deleted data is:" << pthis->link->data << endl;
-            count--;
-            // cout << plast->data;
-            delete (plast);
-            plast=pthis;
-            plast->link = pfirst;
-        }
-    
+    else if (pfirst->link == NULL)
+    {
+        cout << "the deleted data is: " << pfirst->data;
+        delete (pfirst);
+        pfirst = NULL;
+        plast = NULL;
+        count--;
+    }
+    else
+    {
+        ptemp = plast->prev;
+        cout << "the deleted data is: " << plast->data;
+        delete (plast);
+        ptemp->link = NULL;
+        plast = ptemp;
+        count--;
+    }
 }
 
 void DelAtPos()
@@ -179,34 +180,48 @@ void DelAtPos()
     {
         cout << "The list is empty!\n";
     }
+    else if (loc == 1)
+    {
+        DelAtBeg();
+    }
+    else if (loc == 0 || loc > count)
+    {
+        cout << "invalid operation\n";
+    }
+    else if (loc == count)
+    {
+        DelAtEnd();
+    }
     else
     {
         pthis = pfirst;
-        for (int i = 1; i < loc - 1; i++)
+        for (int i = 1; i < loc; i++)
         {
             pthis = pthis->link;
         }
-        ptemp = pthis->link->link;
-        cout << "the deleted data is:" << pthis->link->data << endl;
-        delete (pthis->link);
+        ptemp = pthis->prev;
+        ptemp1 = pthis->link;
+        cout << "the deleted data is:" << pthis->data << endl;
+        delete (pthis);
+        ptemp->link = ptemp1;
+        ptemp1->prev = ptemp;
         count--;
-        pthis->link = ptemp;
     }
 }
 int main()
 {
     int choice;
     char a;
+    cout << "\n1. Insert from beginning\n";
+    cout << "2. Insert at the end\n";
+    cout << "3. Insert before specified position\n";
+    cout << "4. Insert after specified position\n";
+    cout << "5. Display\n";
+    cout << "6. Delete from beginning\n";
+    cout << "7. Delete at the end\n";
+    cout << "8. Delete the specified position\n";
     do
     {
-        cout << "\n1. Insert from beginning\n";
-        cout << "2. Insert at the end\n";
-        cout << "3. Insert before specified position\n";
-        cout << "4. Insert after specified position\n";
-        cout << "5. Display\n";
-        cout << "6. Delete from beginning\n";
-        cout << "7. Delete at the end\n";
-        cout << "8. Delete the specified position\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -243,4 +258,3 @@ int main()
 
     return 0;
 }
-
