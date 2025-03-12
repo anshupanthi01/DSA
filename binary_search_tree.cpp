@@ -1,121 +1,159 @@
+// binary search tree
 #include <iostream>
 using namespace std;
-
 struct node
 {
-    int data;
-    node *lchild, *rchild;
-    // node *root = NULL, *pnew, *pthis, *ppthis;
+    int info;
+    struct node *lchild, *rchild;
 };
-node *root = NULL, *pnew, *pthis, *ppthis;
-
+struct node *root = NULL, *pnew, *pthis, *ppthis, *ptemp;
+void preorder(struct node *P)
+{
+    if (P != NULL)
+    {
+        cout << P->info << endl;
+        preorder(P->lchild);
+        preorder(P->rchild);
+    }
+}
+void inorder(struct node *P)
+{
+    if (P != NULL)
+    {
+        inorder(P->lchild);
+        cout << P->info << endl;
+        inorder(P->rchild);
+    }
+}
+void postorder(struct node *P)
+{
+    if (P != NULL)
+    {
+        postorder(P->lchild);
+        postorder(P->rchild);
+        cout << P->info << endl;
+    }
+}
 void create()
 {
-    cout << "Enter the number of nodes: ";
-    int n;
-    cin >> n;
-    for (int i = 1; i <= n; i++)
-    {
-        pnew = new node;
-    step1:
-        cout << "Enter the data: ";
-        cin >> pnew->data;
-        pnew->lchild = NULL;
-        pnew->rchild = NULL;
-        if (root == NULL)
-        {
-            root = pnew;
-        }
-        else
-        {
-            pthis = root;
-            while (pthis != NULL)
-            {
-                ppthis = pthis;
-                if (pthis->data > pnew->data)
-                {
-                    pthis = pthis->lchild;
-                    if (pthis == NULL)
-                    {
-                        ppthis->lchild = pnew;
-                    }
-                }
-                else if (pthis->data < pnew->data)
-                {
-                    pthis = pthis->rchild;
-                    if (pthis == NULL)
-                    {
-                        ppthis->rchild = pnew;
-                    }
-                }
-                else
-                {
-                    cout<<"duplicate node pls enter another value";
-                    goto step1;
-                }
-            }
-        }
-    }
-}
-void preorder(node *p)
-{
-    if (p != NULL)
-    {
-        cout << p->data << " ";
-        preorder(p->lchild);
-        preorder(p->rchild);
-    }
-}
-void inorder(node *p)
-{
-    if (p != NULL)
-    {
-        inorder(p->lchild);
-        cout << p->data << " ";
-        inorder(p->rchild);
-    }
-}
-void postorder(node *p)
-{
-    if (p != NULL)
-    {
-        postorder(p->lchild);
-        postorder(p->rchild);
-        cout << p->data << " ";
-    }
+    pnew = (struct node *)malloc(sizeof(struct node));
+    cout << "enter the data\n";
+    cin >> pnew->info;
+    pnew->lchild = NULL;
+    pnew->rchild = NULL;
 }
 int main()
 {
-    char a;
-    create();
-    // do
-    while(1)
+    int n;
+    char c;
+    int m;
+    char ch;
+    cout << "do you want to create a tree\n";
+    cin >> ch;
+    while (ch == 'y' || ch == 'Y')
     {
-        cout << "\n1.Preorder\n";
-        cout << "2.Inorder\n";
-        cout << "3.Postorder\n";
-        cout << "4.Exit\n";
-        int choice;
-        cin >> choice;
-        switch (choice)
+        cout << "enter the number of trees u want to enter\n";
+        cin >> m;
+        for (int i = 0; i < m; i++)
+        {
+            create();
+            if (root == NULL)
+            {
+                root = pnew;
+            }
+            else
+            {
+                pthis = root;
+                while (pthis != NULL)
+                {
+                    ppthis = pthis;
+                    if (pnew->info < pthis->info)
+                    {
+                        pthis = pthis->lchild;
+                        if (pthis == NULL)
+                        {
+                            ppthis->lchild = pnew;
+                        }
+                    }
+                    else
+                    {
+                        pthis = pthis->rchild;
+                        if (pthis == NULL)
+                        {
+                            ppthis->rchild = pnew;
+                        }
+                    }
+                }
+            }
+        }
+        ch = n;
+    }
+    cout << "1 preorder\n";
+    cout << "2 inorder\n";
+    cout << "3 postorder\n";
+    cout << "4.search specific node\n";
+    cout << "5 exit\n";
+    do
+    {
+        cout << "enter your choice\n";
+        cin >> n;
+        switch (n)
         {
         case 1:
-            cout << "Preorder: ";
             preorder(root);
             break;
         case 2:
-            cout << "Inorder: ";
             inorder(root);
             break;
         case 3:
-            cout << "Postorder: ";
             postorder(root);
             break;
         case 4:
-            return 0;
+            int data;
+            cout << "enter the data to be searched\n";
+            cin >> data;
+            pthis = root;
+            if (root == NULL)
+            {
+                cout << "tree is empty\n";
+            }
+            else
+            {
+                while (pthis != NULL)
+                {
+                    if (data == pthis->info)
+                    {
+                        cout << "data found\n";
+                        cout << pthis->info << endl;
+                        break;
+                    }
+                    else if (data < pthis->info)
+                    {
+                        cout << "data is in left subtree below this data:";
+                        cout << pthis->info << endl;
+                        pthis = pthis->lchild;
+                    }
+                    else
+                    {
+                        cout << "data is in right subtree below this data:";
+                        cout << pthis->info << endl;
+                        pthis = pthis->rchild;
+                    }
+                }
+                if (pthis == NULL)
+                {
+                    cout << "data not found\n";
+                }
+            }
+            break;
+        case 5:
+            exit(0);
+            break;
+        default:
+            cout << "invalid choice\n";
         }
-        // cout << "\nContinue?(Y/N)\n";
-        // cin >> a;
-    } 
-    // while (a == 'y');
+        cout << "Continue??\n";
+        cin >> c;
+    } while (c == 'y' || c == 'Y');
+    return 0;
 }
