@@ -10,8 +10,8 @@ int main(){
 }
 void TOH(int n, char S, char M, char D){
     if(n>0){
-        TOH(n-1, S, D, M);
+        TOH(n-1, 'S', 'D', 'M');
         cout<<"Move disk "<<n<<" from "<<S<<" to "<<D<<endl;
-        TOH(n-1, M, S, D);
+        TOH(n-1, 'M', 'S', 'D');
     }
 }

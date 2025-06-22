@@ -4,6 +4,8 @@ using namespace std;
 struct node
 {
     int data;
+    char name[20];
+    char address[20];
     node *link;
 };
 
@@ -16,6 +18,10 @@ void create()
     pnew = new node;
     cout << "Enter the data: ";
     cin >> pnew->data;
+    cout<<"Enter the name: ";
+    cin>>pnew->name;
+    cout<<"Enter the address: ";
+    cin>>pnew->address;
     count++;
 }
 
@@ -105,10 +111,10 @@ void display()
         pthis = pfirst;
         while (pthis->link != pfirst)
         {
-            cout << pthis->data << "->";
+            cout << pthis->data <<"\n ";
             pthis = pthis->link;
         }
-        cout << pthis->data;
+        cout << pthis->data<<"\n";
     }
 }
 

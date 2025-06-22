@@ -130,7 +130,7 @@ void DelAtBeg()
     {
         cout << "the list is empty";
     }
-    else if (head->next == head)
+    else if (head->next == head->prev)
     {
         cout << "the deleted data is: " << head->next->data;
         count--;
