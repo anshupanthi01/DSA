@@ -13,7 +13,7 @@ int main()
 {
     int n;
     cout << "Enter the number of terms: ";
-    cin >> n;  
+    cin >> n;
     cout << "Fibonacci Series: ";
     for (int i = 0; i < n; i++)
         cout << fibo(i) << " ";
